@@ -1,0 +1,23 @@
+class Solution:
+    def findFarmland(self, land: List[List[int]]) -> List[List[int]]:
+        def dfs(row, col):
+            land[row][col] = 0
+            for dr, dc in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
+                nr, nc = row + dr, col + dc
+                if 0 <= nr < m and 0 <= nc < n and land[nr][nc] == 1:
+                    bottom_right[0] = max(bottom_right[0], nr)
+                    bottom_right[1] = max(bottom_right[1], nc)
+                    dfs(nr, nc)
+        
+        m, n = len(land), len(land[0])
+        farmlands = []
+
+        for row in range(m):
+            for col in range(n):
+                if land[row][col] == 1:
+                    top_left = [row, col]
+                    bottom_right = [row, col]
+                    dfs(row, col)
+                    farmlands.append([top_left[0], top_left[1], bottom_right[0], bottom_right[1]])
+        
+        return farmlands
