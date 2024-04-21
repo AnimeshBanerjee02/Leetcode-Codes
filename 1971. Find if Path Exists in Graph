@@ -1,0 +1,23 @@
+from collections import defaultdict, deque
+from typing import List
+
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        adjacency_list = defaultdict(list)
+        for edge in edges:
+            u, v = edge
+            adjacency_list[u].append(v)
+            adjacency_list[v].append(u)
+        
+        visited = set()
+        queue = deque([source])
+        while queue:
+            current_vertex = queue.popleft()
+            if current_vertex == destination:
+                return True
+            visited.add(current_vertex)
+            for neighbor in adjacency_list[current_vertex]:
+                if neighbor not in visited:
+                    queue.append(neighbor)
+        
+        return False
