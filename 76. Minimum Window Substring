@@ -1,0 +1,29 @@
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        target_count = {}
+        for char in t:
+            target_count[char] = target_count.get(char, 0) + 1
+
+        left = 0
+        min_window_start = 0
+        min_window_length = float('inf')
+        count = len(t)
+
+        for right, char in enumerate(s):
+            if char in target_count:
+                if target_count[char] > 0:
+                    count -= 1
+                target_count[char] -= 1
+
+            while count == 0:
+                if right - left + 1 < min_window_length:
+                    min_window_start = left
+                    min_window_length = right - left + 1
+
+                if s[left] in target_count:
+                    target_count[s[left]] += 1
+                    if target_count[s[left]] > 0:
+                        count += 1
+                left += 1
+
+        return "" if min_window_length == float('inf') else s[min_window_start:min_window_start + min_window_length]
