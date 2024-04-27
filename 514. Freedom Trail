@@ -1,0 +1,26 @@
+class Solution:
+    def findRotateSteps(self, ring: str, key: str) -> int:
+        def dist(i: int, j: int) -> int:
+            return min(abs(i - j), len(ring) - abs(i - j))
+
+        positions = {}
+        for i, char in enumerate(ring):
+            if char not in positions:
+                positions[char] = []
+            positions[char].append(i)
+
+        dp = {(0, ring[0]): 0}
+
+        for char in key:
+            new_dp = {}
+            for state, steps in dp.items():
+                pos, prev_char = state
+             
+                for next_pos in positions[char]:
+                    new_state = (next_pos, char)
+                    new_steps = steps + dist(pos, next_pos) + 1
+                    if new_state not in new_dp or new_steps < new_dp[new_state]:
+                        new_dp[new_state] = new_steps
+            dp = new_dp
+
+        return min(dp.values())
