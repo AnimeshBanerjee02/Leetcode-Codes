@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<vector<int>> adj;
+    vector<int> subtree_size;
+    vector<int> result;
+    
+    void dfs1(int node, int parent) {
+        subtree_size[node] = 1;
+        for (int neighbor : adj[node]) {
+            if (neighbor != parent) {
+                dfs1(neighbor, node);
+                subtree_size[node] += subtree_size[neighbor];
+                result[node] += result[neighbor] + subtree_size[neighbor];
+            }
+        }
+    }
+    
+    void dfs2(int node, int parent, int n) {
+        for (int neighbor : adj[node]) {
+            if (neighbor != parent) {
+                result[neighbor] = result[node] - subtree_size[neighbor] + n - subtree_size[neighbor];
+                dfs2(neighbor, node, n);
+            }
+        }
+    }
+    
+    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+        adj.resize(n);
+        subtree_size.resize(n, 0);
+        result.resize(n, 0);
+        
+        for (auto& edge : edges) {
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
+        }
+        
+        dfs1(0, -1);
+        dfs2(0, -1, n);
+        
+        return result;
+    }
+};
