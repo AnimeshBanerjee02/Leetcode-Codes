@@ -1,0 +1,14 @@
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        xor_nums = 0
+        for num in nums:
+            xor_nums ^= num
+        
+        xor_k = xor_nums ^ k
+        
+        count = 0
+        while xor_k:
+            count += xor_k & 1
+            xor_k >>= 1
+        
+        return count
