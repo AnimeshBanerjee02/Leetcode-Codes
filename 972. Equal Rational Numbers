@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+class Solution {
+public:
+    bool isRationalEqual(string S, string T) {
+        auto convert = [](const string& str) {
+            if (str.find('.') == string::npos) {
+                return Fraction(stoll(str), 1);
+            }
+            
+            size_t dotIndex = str.find('.');
+            Fraction ans(stoll(str.substr(0, dotIndex)), 1);
+            string remaining = str.substr(dotIndex + 1);
+            
+            if (remaining.find('(') == string::npos) {
+                if (!remaining.empty()) {
+                    Fraction nonRepeat(stoll(remaining), pow(10, remaining.size()));
+                    ans = ans + nonRepeat;
+                }
+                return ans;
+            }
+            
+            size_t repeatIndex = remaining.find('(');
+            if (repeatIndex != 0) {
+                Fraction nonRepeat(stoll(remaining.substr(0, repeatIndex)), pow(10, repeatIndex));
+                ans = ans + nonRepeat;
+            }
+            remaining = remaining.substr(repeatIndex + 1, remaining.size() - repeatIndex - 2);
+            size_t repeatSize = remaining.size();
+            Fraction repeat(stoll(remaining), pow(10, repeatIndex) * (pow(10, repeatSize) - 1));
+            ans = ans + repeat;
+            return ans;
+        };
+
+        return convert(S) == convert(T);
+    }
+
+private:
+    class Fraction {
+    public:
+        long long numerator;
+        long long denominator;
+
+        Fraction(long long num, long long den) : numerator(num), denominator(den) {
+            reduce();
+        }
+
+        void reduce() {
+            long long gcdVal = gcd(abs(numerator), denominator);
+            numerator /= gcdVal;
+            denominator /= gcdVal;
+        }
+
+        long long gcd(long long a, long long b) {
+            return b == 0 ? a : gcd(b, a % b);
+        }
+
+        Fraction operator+(const Fraction& other) const {
+            long long num = numerator * other.denominator + other.numerator * denominator;
+            long long den = denominator * other.denominator;
+            return Fraction(num, den);
+        }
+
+        bool operator==(const Fraction& other) const {
+            return numerator == other.numerator && denominator == other.denominator;
+        }
+    };
+};
