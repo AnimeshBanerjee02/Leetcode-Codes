@@ -1,0 +1,36 @@
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        ListNode* next = nullptr;
+        
+        while (curr != nullptr) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+    
+    ListNode* doubleIt(ListNode* head) {
+        head = reverseList(head);
+        
+        int carry = 0;
+        ListNode* current = head;
+        while (current != nullptr) {
+            int sum = current->val * 2 + carry;
+            current->val = sum % 10;
+            carry = sum / 10;
+            if (current->next == nullptr && carry > 0) {
+                current->next = new ListNode(carry);
+                break;
+            }
+            current = current->next;
+        }
+        
+        return reverseList(head);
+    }
+};
