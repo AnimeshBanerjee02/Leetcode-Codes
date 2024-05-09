@@ -1,0 +1,8 @@
+class Solution:
+    def maximumHappinessSum(self, arr: List[int], k: int) -> int:
+        n = len(arr)
+        ans = 0
+        arr.sort(reverse=True)  # Sort in non-ascending order
+        for i in range(min(n, k)):
+            ans += max(arr[i] - i, 0)  # Decrement factor is i instead of dec
+        return ans
