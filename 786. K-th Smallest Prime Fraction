@@ -1,0 +1,17 @@
+from heapq import heappush, heappop
+
+class Solution:
+    def kthSmallestPrimeFraction(self, arr, k):
+        n = len(arr)
+        heap = []  # min-heap to store fractions
+        for i in range(n - 1):
+            for j in range(i + 1, n):
+                # Push negated fraction to the heap
+                heappush(heap, (-arr[i] / arr[j], arr[i], arr[j]))
+                # If heap size exceeds k, pop the smallest fraction
+                if len(heap) > k:
+                    heappop(heap)
+        
+        # The top of the heap contains the kth smallest fraction
+        _, numerator, denominator = heappop(heap)
+        return [numerator, denominator]
