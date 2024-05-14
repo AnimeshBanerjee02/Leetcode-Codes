@@ -1,0 +1,25 @@
+class Solution:
+    def getMaximumGold(self, grid: List[List[int]]) -> int:
+        def dfs(row, col, visited):
+            if row < 0 or row >= m or col < 0 or col >= n or grid[row][col] == 0 or (row, col) in visited:
+                return 0
+            
+            visited.add((row, col))
+            max_gold = 0
+            
+            for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                new_row, new_col = row + dr, col + dc
+                max_gold = max(max_gold, dfs(new_row, new_col, visited))
+            
+            visited.remove((row, col))
+            return max_gold + grid[row][col]
+        
+        m, n = len(grid), len(grid[0])
+        max_gold = 0
+        
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] != 0:
+                    max_gold = max(max_gold, dfs(i, j, set()))
+        
+        return max_gold
