@@ -1,0 +1,18 @@
+from typing import List
+
+class Solution:
+    def subsetXORSum(self, nums: List[int]) -> int:
+        def dfs(index, current_xor):
+            # Base case: if we've considered all elements
+            if index == len(nums):
+                return current_xor
+            
+            # Recursively include or exclude the current element
+            with_curr = dfs(index + 1, current_xor ^ nums[index])
+            without_curr = dfs(index + 1, current_xor)
+            
+            # Sum of XOR totals with and without the current element
+            return with_curr + without_curr
+        
+        # Start DFS from index 0 and initial XOR value 0
+        return dfs(0, 0)
