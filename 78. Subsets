@@ -1,0 +1,17 @@
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        def backtrack(start, path):
+            # Add the current subset (path) to the result
+            result.append(path[:])
+            
+            for i in range(start, len(nums)):
+                # Include the number nums[i] in the subset
+                path.append(nums[i])
+                # Continue to build the subset from the next number
+                backtrack(i + 1, path)
+                # Remove the last number added to the path to backtrack
+                path.pop()
+        
+        result = []
+        backtrack(0, [])
+        return result
