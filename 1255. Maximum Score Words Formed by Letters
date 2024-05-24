@@ -1,0 +1,42 @@
+from typing import List
+from collections import Counter
+
+class Solution:
+    def maxScoreWords(self, words: List[str], letters: List[str], score: List[int]) -> int:
+        def word_score(word):
+            return sum(score[ord(char) - ord('a')] for char in word)
+        
+        def can_form_word(word, letter_count):
+            word_count = Counter(word)
+            for char, cnt in word_count.items():
+                if letter_count[char] < cnt:
+                    return False
+            return True
+        
+        def backtrack(index, current_score, letter_count):
+            if index == len(words):
+                return current_score
+            
+            max_score = current_score
+            
+            # Try to include the current word
+            word = words[index]
+            if can_form_word(word, letter_count):
+                # Update letter_count
+                for char in word:
+                    letter_count[char] -= 1
+                
+                # Recurse
+                max_score = max(max_score, backtrack(index + 1, current_score + word_score(word), letter_count))
+                
+                # Backtrack
+                for char in word:
+                    letter_count[char] += 1
+            
+            # Try to exclude the current word
+            max_score = max(max_score, backtrack(index + 1, current_score, letter_count))
+            
+            return max_score
+        
+        letter_count = Counter(letters)
+        return backtrack(0, 0, letter_count)
