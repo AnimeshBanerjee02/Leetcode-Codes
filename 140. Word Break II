@@ -1,0 +1,19 @@
+from typing import List
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        wordSet = set(wordDict)
+        sentences = []
+        
+        def backtrack(start, sentence):
+            if start == len(s):
+                sentences.append(sentence.strip())
+                return
+            
+            for end in range(start + 1, len(s) + 1):
+                if s[start:end] in wordSet:
+                    backtrack(end, sentence + s[start:end] + " ")
+        
+        backtrack(0, "")
+        
+        return sentences
