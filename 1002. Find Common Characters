@@ -1,0 +1,8 @@
+class Solution:
+    def commonChars(self, words: List[str]) -> List[str]:
+        result = []
+        for char in set(''.join(words)):
+            count = [word.count(char) for word in words]
+            if all(count):
+                result.extend([char] * min(count))
+        return result
