@@ -1,0 +1,43 @@
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isEndOfWord = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        current = self.root
+        for char in word:
+            if char not in current.children:
+                current.children[char] = TrieNode()
+            current = current.children[char]
+        current.isEndOfWord = True
+
+    def search_shortest_prefix(self, word):
+        current = self.root
+        prefix = ""
+        for char in word:
+            if char in current.children:
+                current = current.children[char]
+                prefix += char
+                if current.isEndOfWord:
+                    return prefix
+            else:
+                break
+        return None
+
+class Solution:
+    def replaceWords(self, dictionary, sentence):
+        trie = Trie()
+        for root in dictionary:
+            trie.insert(root)
+        
+        words = sentence.split()
+        for i in range(len(words)):
+            shortest_prefix = trie.search_shortest_prefix(words[i])
+            if shortest_prefix:
+                words[i] = shortest_prefix
+        
+        return " ".join(words)
