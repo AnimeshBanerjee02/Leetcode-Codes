@@ -1,0 +1,16 @@
+class Solution:
+    def checkSubarraySum(self, nums, k):
+        remainder_index_map = {0: -1}
+        current_sum = 0
+
+        for i in range(len(nums)):
+            current_sum += nums[i]
+            remainder = current_sum % k
+
+            if remainder in remainder_index_map:
+                if i - remainder_index_map[remainder] > 1:
+                    return True
+            else:
+                remainder_index_map[remainder] = i
+
+        return False
