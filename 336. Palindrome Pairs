@@ -1,0 +1,24 @@
+from typing import List
+
+class Solution:
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        word_index = {word: i for i, word in enumerate(words)}
+        result = []
+
+        def is_palindrome(word):
+            return word == word[::-1]
+
+        for i, word in enumerate(words):
+            n = len(word)
+            for j in range(n + 1):
+                prefix, suffix = word[:j], word[j:]
+                if is_palindrome(prefix):
+                    reversed_suffix = suffix[::-1]
+                    if reversed_suffix in word_index and word_index[reversed_suffix] != i:
+                        result.append([word_index[reversed_suffix], i])
+                if j != n and is_palindrome(suffix):
+                    reversed_prefix = prefix[::-1]
+                    if reversed_prefix in word_index and word_index[reversed_prefix] != i:
+                        result.append([i, word_index[reversed_prefix]])
+
+        return result
