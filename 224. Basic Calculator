@@ -1,0 +1,31 @@
+class Solution:
+    def calculate(self, s: str) -> int:
+        stack = []
+        current_number = 0
+        total = 0
+        sign = 1 
+        
+        for char in s:
+            if char.isdigit():
+                current_number = current_number * 10 + int(char)
+            elif char == '+':
+                total += sign * current_number
+                current_number = 0
+                sign = 1
+            elif char == '-':
+                total += sign * current_number
+                current_number = 0
+                sign = -1
+            elif char == '(':
+                stack.append(total)
+                stack.append(sign)
+                total = 0
+                sign = 1
+            elif char == ')':
+                total += sign * current_number
+                current_number = 0
+                total *= stack.pop() 
+                total += stack.pop()  
+        
+        total += sign * current_number
+        return total
