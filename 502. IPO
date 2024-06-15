@@ -1,0 +1,27 @@
+from heapq import heappush, heappop
+from typing import List
+
+class Solution:
+    def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        n = len(profits)
+        projects = [(capital[i], profits[i]) for i in range(n)]
+        
+        min_capital_heap = []
+        for cap, prof in projects:
+            heappush(min_capital_heap, (cap, prof))
+        
+        max_profit_heap = []
+        
+        current_capital = w
+        
+        for _ in range(k):
+            while min_capital_heap and min_capital_heap[0][0] <= current_capital:
+                cap, prof = heappop(min_capital_heap)
+                heappush(max_profit_heap, -prof) 
+            
+            if not max_profit_heap:
+                break
+            
+            current_capital += -heappop(max_profit_heap)
+        
+        return current_capital
