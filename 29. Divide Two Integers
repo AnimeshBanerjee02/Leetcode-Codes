@@ -1,0 +1,46 @@
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        # Constants for 32-bit signed integer limits
+        INT_MAX = 2**31 - 1
+        INT_MIN = -2**31
+        
+        # Special case handling
+        if dividend == 0:
+            return 0
+        if divisor == 1:
+            return min(max(dividend, INT_MIN), INT_MAX)
+        if divisor == -1:
+            return min(max(-dividend, INT_MIN), INT_MAX)
+        
+        # Determine the sign of the result
+        negative = (dividend < 0) != (divisor < 0)
+        
+        # Work with positive values
+        dividend = abs(dividend)
+        divisor = abs(divisor)
+        
+        quotient = 0
+        # The current value we are subtracting
+        current_sum = divisor
+        multiple = 1
+        
+        # Double the current_sum and multiple until current_sum > dividend
+        while (current_sum << 1) <= dividend:
+            current_sum <<= 1
+            multiple <<= 1
+        
+        # Subtract the largest possible multiples of the divisor
+        while dividend >= divisor:
+            if dividend >= current_sum:
+                dividend -= current_sum
+                quotient += multiple
+            # Halve the current_sum and multiple
+            current_sum >>= 1
+            multiple >>= 1
+        
+        # Apply the sign to the quotient
+        if negative:
+            quotient = -quotient
+        
+        # Clamp the result to 32-bit signed integer range
+        return min(max(quotient, INT_MIN), INT_MAX)
