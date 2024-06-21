@@ -1,0 +1,22 @@
+from typing import List
+
+class Solution:
+    def maxSatisfied(self, customers: List[int], grumpy: List[int], minutes: int) -> int:
+        n = len(customers)
+        
+        total_satisfied = sum(customers[i] for i in range(n) if grumpy[i] == 0)
+      
+        additional_satisfied = sum(customers[i] for i in range(minutes) if grumpy[i] == 1)
+        
+        max_additional_satisfied = additional_satisfied
+        
+        # Sliding window to find the optimal 'minutes' duration to use the technique
+        for i in range(minutes, n):
+            if grumpy[i] == 1:
+                additional_satisfied += customers[i]
+            if grumpy[i - minutes] == 1:
+                additional_satisfied -= customers[i - minutes]
+            
+            max_additional_satisfied = max(max_additional_satisfied, additional_satisfied)
+        
+        return total_satisfied + max_additional_satisfied
