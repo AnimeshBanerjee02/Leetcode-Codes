@@ -1,0 +1,123 @@
+from math import log
+from bisect import bisect_left, bisect_right
+
+class ST_AND:
+    def __init__(self, nums):
+        self.nums = nums
+        self.st = self.build(nums)
+        
+    def build(self, nums):
+        n = len(nums)
+        doubles = [[x] for x in nums]
+        
+        base = 1
+        shift = 1
+        while shift < n:
+            for i in range(n):
+                if i + shift >= n:
+                    doubles[i].append(doubles[i][-1])
+                else:
+                    doubles[i].append(doubles[i][-1] & doubles[i + shift][-1])
+            shift *= 2
+            base += 1
+        return doubles
+    
+    def getval(self, idx1, idx2):
+        d = idx2 - idx1 + 1
+        lidx = int(log(d, 2))
+        d2 = 1 << lidx
+        return self.st[idx1][lidx] & self.st[idx2 - d2 + 1][lidx]
+
+    
+class ST_MIN:
+    def __init__(self, nums):
+        self.nums = nums
+        self.st = self.build(nums)
+        
+    def build(self, nums):
+        n = len(nums)
+        doubles = [[x] for x in nums]
+        
+        base = 1
+        shift = 1
+        while shift < n:
+            for i in range(n):
+                if i + shift >= n:
+                    doubles[i].append(doubles[i][-1])
+                else:
+                    doubles[i].append(min(doubles[i][-1], doubles[i + shift][-1]))
+            shift *= 2
+            base += 1
+        return doubles
+    
+    def getval(self, idx1, idx2):
+        d = idx2 - idx1 + 1
+        lidx = int(log(d, 2))
+        d2 = 1 << lidx
+        return min(self.st[idx1][lidx], self.st[idx2 - d2 + 1][lidx])
+
+
+class Solution:
+    def find_lb(self, st_and, idx2, target):
+        left = 1
+        right = idx2 + 1
+        
+        res = float('inf')
+        while left <= right:
+            mid = (left + right) // 2
+            idx1 = idx2 - mid + 1
+            val = st_and.getval(idx1, idx2)
+            # print("lb", idx1, idx2, val)
+            if val == target:
+                res = min(res, idx1)
+                left = mid + 1
+            elif val < target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return res
+    
+    def find_rb(self, st_and, idx2, target):
+        left = 1
+        right = idx2 + 1
+        
+        res = -float('inf')
+        while left <= right:
+            mid = (left + right) // 2
+            idx1 = idx2 - mid + 1
+            val = st_and.getval(idx1, idx2)
+            # print("rb", idx1, idx2, val)
+            if val == target:
+                res = max(res, idx1)
+                right = mid - 1
+            elif val < target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return res        
+
+    def minimumValueSum(self, nums: List[int], andValues: List[int]) -> int:
+        k = len(andValues)
+        n = len(nums)
+        dp = [[float('inf')] * n for i in range(k)]
+        st_and = ST_AND(nums)
+        
+        target = andValues[0]
+        for i in range(n):
+            if st_and.getval(0, i) == target:
+                dp[0][i] = nums[i]
+            
+        for i in range(1, k):
+            st_min = ST_MIN(dp[i - 1])
+            target = andValues[i]
+            for j in range(i, n):
+                if nums[j] < target:
+                    continue
+                lb = self.find_lb(st_and, j, target)
+                rb = self.find_rb(st_and, j, target)
+                if lb <= rb:
+                    dp[i][j] = st_min.getval(max(0, lb - 1), max(0, rb - 1)) + nums[j]             
+
+        if dp[k-1][n - 1] == float('inf'):
+            return -1
+        return dp[k-1][n - 1]
