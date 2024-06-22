@@ -1,0 +1,21 @@
+from typing import List
+
+class Solution:
+    def numberOfSubarrays(self, nums: List[int], k: int) -> int:
+        count = 0
+        prefix_sum = 0
+        prefix_counts = {0: 1}  
+        
+        for num in nums:
+            if num % 2 != 0:
+                prefix_sum += 1
+            
+            if prefix_sum - k in prefix_counts:
+                count += prefix_counts[prefix_sum - k]
+            
+            if prefix_sum in prefix_counts:
+                prefix_counts[prefix_sum] += 1
+            else:
+                prefix_counts[prefix_sum] = 1
+        
+        return count
