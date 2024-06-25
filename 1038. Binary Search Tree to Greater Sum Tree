@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    // Function to convert the BST to Greater Tree
+    TreeNode* bstToGst(TreeNode* root) {
+        int runningSum = 0;
+        convertBST(root, runningSum);
+        return root;
+    }
+
+private:
+    void convertBST(TreeNode* node, int &runningSum) {
+        if (node == nullptr) return;
+
+        // Traverse the right subtree first (greater values)
+        convertBST(node->right, runningSum);
+        
+        // Update the current node's value with the running sum
+        runningSum += node->val;
+        node->val = runningSum;
+
+        // Traverse the left subtree next
+        convertBST(node->left, runningSum);
+    }
+};
