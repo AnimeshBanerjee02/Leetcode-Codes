@@ -1,0 +1,36 @@
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+
+class Solution {
+public:
+    long long maximumImportance(int n, std::vector<std::vector<int>>& roads) {
+        std::vector<int> degree(n, 0);
+        
+        for (const auto& road : roads) {
+            degree[road[0]]++;
+            degree[road[1]]++;
+        }
+        
+        std::vector<std::pair<int, int>> degree_city;
+        for (int i = 0; i < n; ++i) {
+            degree_city.emplace_back(degree[i], i);
+        }
+        
+        std::sort(degree_city.rbegin(), degree_city.rend());
+        
+        std::vector<int> value(n, 0);
+        
+        int current_value = n;
+        for (const auto& dc : degree_city) {
+            value[dc.second] = current_value--;
+        }
+        
+        long long total_importance = 0;
+        for (const auto& road : roads) {
+            total_importance += value[road[0]] + value[road[1]];
+        }
+        
+        return total_importance;
+    }
+};
