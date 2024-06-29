@@ -1,0 +1,42 @@
+#include <vector>
+#include <set>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> getAncestors(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> graph(n);
+        for (const auto& edge : edges) {
+            graph[edge[1]].push_back(edge[0]);
+        }
+
+        vector<set<int>> ancestors(n);
+        vector<bool> visited(n, false);
+
+        function<void(int)> dfs = [&](int node) {
+            visited[node] = true;
+            for (int neighbor : graph[node]) {
+                if (!visited[neighbor]) {
+                    dfs(neighbor);
+                }
+                ancestors[node].insert(neighbor);
+                ancestors[node].insert(ancestors[neighbor].begin(), ancestors[neighbor].end());
+            }
+        };
+
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                dfs(i);
+            }
+        }
+
+        vector<vector<int>> result(n);
+        for (int i = 0; i < n; ++i) {
+            result[i] = vector<int>(ancestors[i].begin(), ancestors[i].end());
+        }
+
+        return result;
+    }
+};
