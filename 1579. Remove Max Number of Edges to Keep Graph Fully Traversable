@@ -1,0 +1,52 @@
+class UnionFind:
+    def __init__(self, n):
+        self.representative = list(range(n + 1))
+        self.componentSize = [1] * (n + 1)
+        self.components = n
+    
+    def findRepresentative(self, x):
+        if self.representative[x] == x:
+            return x
+        self.representative[x] = self.findRepresentative(self.representative[x])  # Path compression
+        return self.representative[x]
+    
+    def performUnion(self, x, y):
+        x = self.findRepresentative(x)
+        y = self.findRepresentative(y)
+        
+        if x == y:
+            return 0
+        
+        if self.componentSize[x] > self.componentSize[y]:
+            self.componentSize[x] += self.componentSize[y]
+            self.representative[y] = x
+        else:
+            self.componentSize[y] += self.componentSize[x]
+            self.representative[x] = y
+        
+        self.components -= 1
+        return 1
+    
+    def isConnected(self):
+        return self.components == 1
+
+class Solution:
+    def maxNumEdgesToRemove(self, n, edges):
+        Alice = UnionFind(n)
+        Bob = UnionFind(n)
+        edgesRequired = 0
+        
+        for edge in edges:
+            if edge[0] == 3:
+                edgesRequired += (Alice.performUnion(edge[1], edge[2]) | Bob.performUnion(edge[1], edge[2]))
+        
+        for edge in edges:
+            if edge[0] == 1:
+                edgesRequired += Alice.performUnion(edge[1], edge[2])
+            elif edge[0] == 2:
+                edgesRequired += Bob.performUnion(edge[1], edge[2])
+        
+        if Alice.isConnected() and Bob.isConnected():
+            return len(edges) - edgesRequired
+        
+        return -1
