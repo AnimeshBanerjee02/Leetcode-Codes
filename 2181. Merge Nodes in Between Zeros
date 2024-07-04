@@ -1,0 +1,25 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def mergeNodes(self, head: ListNode) -> ListNode:
+        dummy = ListNode()
+        current_new_list_node = dummy
+        
+        current_sum = 0
+        current = head.next  
+        
+        while current is not None:
+            if current.val == 0:
+                if current_sum != 0:
+                    current_new_list_node.next = ListNode(current_sum)
+                    current_new_list_node = current_new_list_node.next
+                current_sum = 0
+            else:
+                current_sum += current.val
+            current = current.next
+        
+        return dummy.next
