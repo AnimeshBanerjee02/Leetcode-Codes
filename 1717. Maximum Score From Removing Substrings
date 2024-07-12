@@ -1,0 +1,20 @@
+class Solution:
+    def maximumGain(self, s: str, x: int, y: int) -> int:
+        first_pair, first_points = ("ab", x) if x > y else ("ba", y)
+        second_pair, second_points = ("ba", y) if x > y else ("ab", x)
+        
+        def remove_pairs(s: str, pair: str, points: int) -> (str, int):
+            stack = []
+            score = 0
+            for char in s:
+                if stack and stack[-1] == pair[0] and char == pair[1]:
+                    stack.pop()
+                    score += points
+                else:
+                    stack.append(char)
+            return ''.join(stack), score
+
+        s, score = remove_pairs(s, first_pair, first_points)
+        _, score2 = remove_pairs(s, second_pair, second_points)
+        
+        return score + score2
