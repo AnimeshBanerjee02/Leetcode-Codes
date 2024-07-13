@@ -1,0 +1,19 @@
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        ans = "1"
+        
+        while n > 1:
+            next_seq = []
+            i = 0
+            while i < len(ans):
+                count = 1
+                while i + 1 < len(ans) and ans[i] == ans[i + 1]:
+                    count += 1
+                    i += 1
+                next_seq.append(str(count))
+                next_seq.append(ans[i])
+                i += 1
+            ans = ''.join(next_seq)
+            n -= 1
+        
+        return ans
