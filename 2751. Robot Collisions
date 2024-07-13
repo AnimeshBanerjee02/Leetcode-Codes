@@ -1,0 +1,33 @@
+from typing import List
+
+class Solution:
+    def survivedRobotsHealths(self, positions: List[int], healths: List[int], directions: str) -> List[int]:
+        # Combine positions, healths, and directions into a single list of tuples
+        robots = list(zip(positions, healths, directions))
+        # Sort robots by their positions
+        robots.sort()
+        
+        stack = []
+        
+        for pos, health, direction in robots:
+            if direction == 'R':
+                stack.append((pos, health, direction))
+            else:
+                while stack and stack[-1][2] == 'R':
+                    prev_pos, prev_health, prev_direction = stack.pop()
+                    if prev_health > health:
+                        prev_health -= 1
+                        stack.append((prev_pos, prev_health, prev_direction))
+                        break
+                    elif prev_health < health:
+                        health -= 1
+                    else:
+                        break
+                else:
+                    stack.append((pos, health, direction))
+        
+        # Extract the healths of surviving robots
+        surviving_robots = {pos: health for pos, health, direction in stack}
+        
+        # Return healths in the order of the original positions
+        return [surviving_robots[pos] for pos in positions if pos in surviving_robots]
