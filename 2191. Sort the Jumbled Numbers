@@ -1,0 +1,14 @@
+from typing import List
+
+class Solution:
+    def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
+        def map_value(num):
+            str_num = str(num)
+            mapped_str = ''.join(str(mapping[int(digit)]) for digit in str_num)
+            return int(mapped_str)
+        
+        mapped_nums = [(map_value(num), num) for num in nums]
+        
+        mapped_nums.sort(key=lambda x: x[0])
+        
+        return [num for _, num in mapped_nums]
