@@ -1,0 +1,24 @@
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        from collections import Counter
+        
+        # Count the frequency of each letter in the word
+        freq = Counter(word)
+        
+        # Get the frequencies sorted in descending order
+        frequencies = sorted(freq.values(), reverse=True)
+        
+        # To minimize the pushes, map the most frequent letters to positions requiring the fewest pushes
+        min_pushes = 0
+        position = 1  # Start with the position that requires the least push (1 push)
+        letters_assigned = 0
+        
+        # Since there are 8 positions per key (key 2 to key 9 can have different letters assigned to them)
+        for count in frequencies:
+            if letters_assigned >= 8:  # If we've used 8 positions, move to the next key
+                position += 1
+                letters_assigned = 0  # Reset the count for the next key
+            min_pushes += count * position
+            letters_assigned += 1
+        
+        return min_pushes
