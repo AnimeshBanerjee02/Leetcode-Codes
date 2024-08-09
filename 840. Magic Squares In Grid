@@ -1,0 +1,36 @@
+class Solution:
+    def numMagicSquaresInside(self, grid: list[list[int]]) -> int:
+        def isMagic(i, j):
+            # Check all values are unique and between 1 to 9
+            s = set()
+            for x in range(3):
+                for y in range(3):
+                    val = grid[i + x][j + y]
+                    if val < 1 or val > 9 or val in s:
+                        return False
+                    s.add(val)
+            
+            # Check the sums of rows, columns and diagonals
+            if (grid[i][j] + grid[i][j + 1] + grid[i][j + 2] != 15 or
+                grid[i + 1][j] + grid[i + 1][j + 1] + grid[i + 1][j + 2] != 15 or
+                grid[i + 2][j] + grid[i + 2][j + 1] + grid[i + 2][j + 2] != 15 or
+                grid[i][j] + grid[i + 1][j] + grid[i + 2][j] != 15 or
+                grid[i][j + 1] + grid[i + 1][j + 1] + grid[i + 2][j + 1] != 15 or
+                grid[i][j + 2] + grid[i + 1][j + 2] + grid[i + 2][j + 2] != 15 or
+                grid[i][j] + grid[i + 1][j + 1] + grid[i + 2][j + 2] != 15 or
+                grid[i][j + 2] + grid[i + 1][j + 1] + grid[i + 2][j] != 15):
+                return False
+            
+            return True
+
+        row = len(grid)
+        col = len(grid[0])
+        count = 0
+        
+        # Loop through each possible 3x3 subgrid
+        for i in range(row - 2):
+            for j in range(col - 2):
+                if isMagic(i, j):
+                    count += 1
+        
+        return count
