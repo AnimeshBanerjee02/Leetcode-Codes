@@ -1,0 +1,19 @@
+def lmax(row):
+    n = len(row)
+    ans = [0]*n
+    for j in range(n): ans[j] = max(ans[j-1]-1, row[j])
+    return ans
+def rmax(row):
+    n = len(row)
+    ans = [0]*n
+    ans[-1] = row[-1]
+    for j in range(n-2, -1, -1): ans[j] = max(ans[j+1]-1, row[j])
+    return ans
+class Solution:
+    @staticmethod
+    def maxPoints(points: List[List[int]]) -> int:
+        dp = points[-1]
+        for row in points[-2::-1]:
+            l_max, r_max = lmax(dp), rmax(dp)
+            dp = [max(l,r)+p for l, r, p in zip(l_max, r_max, row)]
+        return max(dp)
