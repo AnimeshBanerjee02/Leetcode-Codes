@@ -1,0 +1,58 @@
+class Solution:
+    def nearestPalindromic(self, n: str) -> str:
+        if int(n) < 10:
+            if int(n) == 0:
+                return '1'
+            else:
+                return str(int(n) - 1)
+        
+        actual_len = len(n)
+        len_n = (len(n) + 1) // 2
+        ori_n = n[0:len_n]
+        small_n = str(int(ori_n) - 1)
+        large_n = str(int(ori_n) + 1)
+
+        ori_num = ''
+        small_num = ''
+        large_num = ''
+        if actual_len % 2 == 1:
+            ori_num = ori_n + ori_n[::-1][1:]
+            if small_n[len(small_n) - 1] == '9' and len(small_n) < len_n: # 10 - 1 = 9, 100 - 1 = 9, we no need make it shorter
+                small_num = small_n + small_n[::-1]
+            else:
+                small_num = small_n + small_n[::-1][1:]
+
+            if len(large_n) > len_n:
+                large_num = large_n[0:len(large_n) - 1] + large_n[::-1][1:]
+            else:
+                large_num = large_n + large_n[::-1][1:]
+        else:
+            ori_num = ori_n + ori_n[::-1]
+            if small_n == '0':
+                small_num = '9'
+            elif small_n[len(small_n) - 1] == '9' and len(small_n) < len_n: # 1000 -> 10 -> 10, 9, 11
+                small_num = small_n + '9' +small_n[::-1]
+            else:
+                small_num = small_n + small_n[::-1]
+
+            if 2 * len(large_n) > len(n):
+                large_num = large_n + large_n[::-1][1:]
+            else:
+                large_num = large_n + large_n[::-1]
+
+        if ori_num == n:
+            if abs(int(small_num) - int(n)) <= int(large_num) - int(n):
+                return small_num
+            else:
+                return large_num
+        elif ori_num < n:
+            if abs(int(ori_num) - int(n)) <= int(large_num) - int(n):
+                return ori_num
+            else:
+                return large_num
+
+        else:
+            if abs(int(small_num) - int(n)) <= int(ori_num) - int(n):
+                return small_num
+            else:
+                return ori_num
