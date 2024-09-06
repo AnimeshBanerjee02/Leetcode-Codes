@@ -1,0 +1,21 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def modifiedList(self, nums: List[int], head: Optional[ListNode]) -> Optional[ListNode]:
+        s = set(nums)
+
+        fakehead = ListNode(-1, head)
+
+        node = fakehead
+
+        while node:
+            if node.next and node.next.val in s:
+                node.next = node.next.next
+                continue
+            node = node.next
+
+        return fakehead.next
+
