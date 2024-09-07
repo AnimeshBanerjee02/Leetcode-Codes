@@ -1,0 +1,30 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
+        def is_subpath(node, head):
+            if not head:
+                return True
+            if not node:
+                return False
+            if node.val == head.val:
+                return is_subpath(node.left, head.next) or is_subpath(node.right, head.next)
+            return False
+
+        def traverse(node):
+            if not node:
+                return False
+            if is_subpath(node, head):
+                return True
+            return traverse(node.left) or traverse(node.right)
+
+        return traverse(root)
