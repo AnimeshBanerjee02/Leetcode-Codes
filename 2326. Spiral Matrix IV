@@ -1,0 +1,20 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def spiralMatrix(self, m: int, n: int, head: Optional[ListNode]) -> List[List[int]]:
+        matrix = [[-1] * n for _ in range(m)]
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        x, y, d = 0, 0, 0
+        current = head
+        while current:
+            matrix[x][y] = current.val
+            current = current.next
+            nx, ny = x + directions[d][0], y + directions[d][1]
+            if nx < 0 or nx >= m or ny < 0 or ny >= n or matrix[nx][ny] != -1:
+                d = (d + 1) % 4
+                nx, ny = x + directions[d][0], y + directions[d][1]
+            x, y = nx, ny
+        return matrix
