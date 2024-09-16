@@ -1,0 +1,18 @@
+class Solution:
+    def findMinDifference(self, timePoints: List[str]) -> int:
+        def timeToMinutes(time: str) -> int:
+            hours, minutes = map(int, time.split(":"))
+            return hours * 60 + minutes
+        
+        minutesList = [timeToMinutes(time) for time in timePoints]
+        
+        minutesList.sort()
+        
+        minDiff = float('inf')
+        
+        for i in range(1, len(minutesList)):
+            minDiff = min(minDiff, minutesList[i] - minutesList[i - 1])
+        
+        minDiff = min(minDiff, (1440 + minutesList[0] - minutesList[-1]) % 1440)
+        
+        return minDiff
