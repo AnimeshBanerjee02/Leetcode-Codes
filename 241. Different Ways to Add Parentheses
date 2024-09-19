@@ -1,0 +1,30 @@
+class Solution:
+    def diffWaysToCompute(self, expression: str) -> List[int]:
+        memo = {}
+
+        def compute(expr):
+            if expr in memo:
+                return memo[expr]
+
+            result = []
+            for i, char in enumerate(expr):
+                if char in '+-*':
+                    left = compute(expr[:i])
+                    right = compute(expr[i+1:])
+                    
+                    for l in left:
+                        for r in right:
+                            if char == '+':
+                                result.append(l + r)
+                            elif char == '-':
+                                result.append(l - r)
+                            elif char == '*':
+                                result.append(l * r)
+            
+            if not result:
+                result.append(int(expr))
+            
+            memo[expr] = result
+            return result
+
+        return compute(expression)
