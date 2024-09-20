@@ -1,0 +1,27 @@
+class Solution:
+    def shortestPalindrome(self, s: str) -> str:
+        if not s:
+            return s
+        
+        rev_s = s[::-1]
+        
+        concat_s = s + "#" + rev_s
+        
+        kmp_table = [0] * len(concat_s)
+        
+        j = 0  
+        for i in range(1, len(concat_s)):
+            while j > 0 and concat_s[i] != concat_s[j]:
+                j = kmp_table[j - 1]
+            
+            if concat_s[i] == concat_s[j]:
+                j += 1
+                kmp_table[i] = j
+        
+        longest_prefix_suffix_length = kmp_table[-1]
+        
+        to_add = rev_s[:len(s) - longest_prefix_suffix_length]
+        
+        shortest_palindrome = to_add + s
+        
+        return shortest_palindrome
