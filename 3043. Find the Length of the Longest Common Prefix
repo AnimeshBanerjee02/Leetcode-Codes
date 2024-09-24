@@ -1,0 +1,45 @@
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.endOfWord = False
+
+class Trie:
+    def __init__(self):
+        self.node = TrieNode()
+    
+    def insert(self,number):
+        curr = self.node
+        s = str(number)
+        for x in s:
+            if x not in curr.children:
+                curr.children[x] = TrieNode()
+            curr = curr.children[x]
+        curr.endOfWord = True
+    
+    def prefix_count(self,number):
+        curr = self.node
+        temp = str(number)
+        count = 0
+        for x in range(len(temp)):
+            if temp[x] not in curr.children:
+                break
+            else:
+                count+=1
+                curr = curr.children[temp[x]]
+        return count
+
+
+            
+class Solution:
+    def longestCommonPrefix(self, arr1: List[int], arr2: List[int]) -> int:
+        node1 = Trie()
+        for x in arr1:
+            node1.insert(x)
+        
+        m = float('-inf')
+        for x in arr2:
+            m = max(m,node1.prefix_count(x))
+        
+        return m
+
+        
