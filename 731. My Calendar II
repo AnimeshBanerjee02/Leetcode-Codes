@@ -1,0 +1,25 @@
+class MyCalendarTwo:
+
+    def __init__(self):
+        self.single_bookings = []
+        self.double_bookings = []
+
+    def book(self, start: int, end: int) -> bool:
+        for db_start, db_end in self.double_bookings:
+            if max(start, db_start) < min(end, db_end):
+                return False
+
+        for sb_start, sb_end in self.single_bookings:
+            overlap_start = max(start, sb_start)
+            overlap_end = min(end, sb_end)
+            if overlap_start < overlap_end:
+                self.double_bookings.append((overlap_start, overlap_end))
+
+        self.single_bookings.append((start, end))
+        return True
+
+
+
+# Your MyCalendarTwo object will be instantiated and called as such:
+# obj = MyCalendarTwo()
+# param_1 = obj.book(start,end)
