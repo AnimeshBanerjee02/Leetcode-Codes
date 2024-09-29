@@ -1,0 +1,60 @@
+class ListNode: 
+    
+    def __init__(self, keys, freq=0, next=None, prev=None):
+        self.keys = keys
+        self.freq = freq
+        self.next = next
+        self.prev = prev 
+        
+
+class AllOne:
+
+    def __init__(self):
+        self.mp = {}
+        self.head = ListNode(set())
+        self.tail = ListNode(set())
+        self.head.next = self.tail
+        self.tail.prev = self.head 
+
+    def inc(self, key: str) -> None:
+        if key in self.mp: 
+            node = self.mp[key]
+            node.keys.remove(key)
+        else: node = self.head 
+        if node.next.freq == node.freq + 1: 
+            self.mp[key] = node.next 
+            node.next.keys.add(key)
+        else: 
+            newn = ListNode({key}, node.freq+1, next=node.next, prev=node)
+            node.next.prev = node.next = newn
+            self.mp[key] = newn
+        if node != self.head and not node.keys: 
+            node.prev.next = node.next
+            node.next.prev = node.prev
+
+    def dec(self, key: str) -> None:
+        node = self.mp[key] 
+        node.keys.remove(key)
+        if node.freq == 1: self.mp.pop(key)
+        elif node.prev.freq + 1 == node.freq: 
+            node.prev.keys.add(key)
+            self.mp[key] = node.prev 
+        else: 
+            newn = ListNode({key}, node.freq-1, next=node, prev=node.prev)
+            node.prev.next = node.prev = newn
+            self.mp[key] = newn
+        if not node.keys: 
+            node.prev.next = node.next
+            node.next.prev = node.prev 
+
+    def getMaxKey(self) -> str:
+        if self.tail.prev == self.head: return ""
+        ans = self.tail.prev.keys.pop()
+        self.tail.prev.keys.add(ans)
+        return ans 
+
+    def getMinKey(self) -> str:
+        if self.head.next == self.tail: return ""
+        ans = self.head.next.keys.pop()
+        self.head.next.keys.add(ans)
+        return ans 
