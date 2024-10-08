@@ -1,0 +1,14 @@
+class Solution:
+    def minSwaps(self, s: str) -> int:
+        swapcount=0
+        error=0
+        for bracket in s:
+            if bracket==']':
+                if error == 0:
+                    swapcount+=1
+                    error+=1
+                else:
+                    error-=1
+            else:
+                error+=1
+        return swapcount
