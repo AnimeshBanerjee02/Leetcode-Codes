@@ -1,0 +1,26 @@
+import heapq
+
+class Solution:
+    def smallestChair(self, times, targetFriend):
+        n = len(times)
+        events = []
+        for i, (arrive, leave) in enumerate(times):
+            events.append((arrive, 'arrive', i))  
+            events.append((leave, 'leave', i))    
+        
+        events.sort(key=lambda x: (x[0], x[1] == 'arrive'))
+
+        available_chairs = []
+        for i in range(n):
+            heapq.heappush(available_chairs, i)
+        
+        friend_to_chair = {}
+
+        for time, event_type, friend in events:
+            if event_type == 'arrive':
+                chair = heapq.heappop(available_chairs)
+                friend_to_chair[friend] = chair
+                if friend == targetFriend:
+                    return chair
+            else:
+                heapq.heappush(available_chairs, friend_to_chair[friend])
