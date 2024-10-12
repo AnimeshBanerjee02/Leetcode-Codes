@@ -1,0 +1,21 @@
+class Solution:
+    def minGroups(self, intervals: List[List[int]]) -> int:
+        events = []
+        
+        for interval in intervals:
+            events.append((interval[0], 'start'))
+            events.append((interval[1] + 1, 'end'))
+        
+        events.sort()
+
+        max_active_intervals = 0
+        active_intervals = 0
+        
+        for event in events:
+            if event[1] == 'start':
+                active_intervals += 1
+                max_active_intervals = max(max_active_intervals, active_intervals)
+            else:
+                active_intervals -= 1
+        
+        return max_active_intervals
