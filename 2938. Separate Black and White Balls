@@ -1,0 +1,7 @@
+class Solution:
+    def minimumSteps(self, s: str) -> int:
+
+        idxs = [i for i, ch in enumerate(s) if ch == '0']
+        sm, cnt = sum(idxs), len(idxs)
+
+        return sm - cnt*(cnt-1)//2
