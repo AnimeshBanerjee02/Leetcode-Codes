@@ -1,0 +1,5 @@
+class Solution:
+    def parseBoolExpr(self, expression: str) -> bool:
+        def neg(x): return not x[0]
+        return eval(expression.replace('&','all').replace('|','any').replace('t','True').replace('f','False').replace('(','([').replace(')','])').replace('!','neg'))
+        
