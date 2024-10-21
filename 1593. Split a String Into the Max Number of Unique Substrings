@@ -1,0 +1,22 @@
+class Solution:
+    def maxUniqueSplit(self, s: str) -> int:
+        def f(s):
+            if s=="":
+                return set()
+            maxset=[{s}]
+            n=len(s)
+            for i in range(1,n):
+                str1=s[:i]
+                ress=f(s[i:])
+                for res in ress:
+                    if str1 in res:
+                        continue
+                    res.add(str1)
+                    maxset.append(res)
+            return maxset
+        res=f(s)
+        m=0
+        for r in res:
+            m=max(m,len(r))
+            #print(m)
+        return m
