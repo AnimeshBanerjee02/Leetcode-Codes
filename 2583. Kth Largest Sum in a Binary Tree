@@ -1,0 +1,28 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def kthLargestLevelSum(self, root: Optional[TreeNode], k: int) -> int:
+        q = [root]
+        levelSums = [root.val]
+        while q:
+            levelSum = 0
+            temp = []
+            for node in q:
+                if node.left:
+                    levelSum += node.left.val
+                    temp.append(node.left)
+                if node.right:
+                    levelSum += node.right.val
+                    temp.append(node.right)
+            if levelSum > 0:
+                levelSums.append(levelSum)
+            q = temp
+        if len(levelSums) < k:
+            return -1
+        levelSums.sort()
+        return levelSums[-k] 
+        
