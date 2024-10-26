@@ -1,0 +1,33 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def countDepth(self, node: Optional[TreeNode], level: int) -> int:
+        if not node:
+            return level
+        level += 1
+        if not level in self.levels:
+            self.levels[level] = []
+        curr = max(
+            self.countDepth(node.left, level),
+            self.countDepth(node.right, level)
+        )
+        heapq.heappush(self.levels[level], (-curr, node.val))
+        return curr
+    
+    def treeQueries(self, root: Optional[TreeNode], queries: List[int]) -> List[int]:
+        self.levels = {}
+        self.countDepth(root, -1)
+        self.withouts = {}
+        for level, nodes in self.levels.items():
+            mx, node = heapq.heappop(nodes)
+            if len(nodes) > 0:
+                self.withouts[node] = -nodes[0][0]
+            else:
+                self.withouts[node] = level - 1
+            for _, n in nodes:
+                self.withouts[n] = -mx
+        return [self.withouts[n] for n in queries]
