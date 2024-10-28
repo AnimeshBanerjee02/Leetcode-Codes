@@ -1,0 +1,17 @@
+class Solution:
+    def longestSquareStreak(self, nums: List[int]) -> int:
+        nums = sorted(set(nums))
+        num_set = set(nums)  
+        max_length = 0
+        for n in nums:
+            length = 1  
+            
+            current = n
+            while current * current in num_set:
+                current = current * current
+                length += 1
+            
+            if length > 1:  
+                max_length = max(max_length, length)
+        
+        return max_length if max_length >= 2 else -1
