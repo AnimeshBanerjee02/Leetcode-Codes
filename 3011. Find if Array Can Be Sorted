@@ -1,0 +1,14 @@
+class Solution:
+    def canSortArray(self, nums: List[int]) -> bool:
+        setbitcount=[bin(x)[2:].count("1") for x in nums]
+        i,j,prevmax=0,0,-1
+        while i<len(nums):
+            jmin,jmax=nums[i],nums[i]
+            while j<len(nums) and setbitcount[i]==setbitcount[j]:
+                jmin=min(jmin,nums[j])
+                jmax=max(jmax,nums[j])
+                j+=1
+            if prevmax>jmin: return False
+            prevmax=jmax
+            i=j
+        return True
