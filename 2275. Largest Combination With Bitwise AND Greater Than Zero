@@ -1,0 +1,10 @@
+class Solution:
+    def largestCombination(self, candidates: List[int]) -> int:
+        ans = 0
+        for bitShift in range(32):
+            bitCnt = 0
+            for num in candidates:
+                if num&(1<<bitShift):
+                    bitCnt += 1
+            ans = max(ans, bitCnt)
+        return ans
