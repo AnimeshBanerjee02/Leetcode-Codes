@@ -1,0 +1,15 @@
+class Solution:
+    def minEnd(self, n: int, x: int) -> int:
+        if n == 1:
+            return x        
+        t = n-1
+        r = x      
+        for i in range(1000):
+            if not 2**i & x:
+                if t % 2:
+                    r += 2**i                    
+                t //= 2
+            if not t:
+                break            
+            
+        return r
