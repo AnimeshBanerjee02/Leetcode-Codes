@@ -1,0 +1,27 @@
+class Solution:
+    def maximumBeauty(self, items: List[List[int]], queries: List[int]) -> List[int]:
+        def binarySearch(l, i, j, target):
+            while i < j:
+                mid = (i+j)>>1
+                if l[mid][0] <= target:
+                    i = mid + 1
+                else:
+                    j = mid
+            return l[i][1] if target >= l[i][0] else l[i-1][1]
+                    
+        items.sort(key = lambda x : x[0])
+        i, n = 0,  len(items)
+        currmax = items[0][1]
+        mincost = items[0][0]
+        for i in range(n):
+            currmax = max(currmax, items[i][1])
+            items[i][1] = currmax
+        
+        ans = []
+        for q in queries:
+            if q < mincost:
+                ans.append(0)
+                continue
+            else:
+                ans.append(binarySearch(items, 0, n -1 , q))
+        return ans
