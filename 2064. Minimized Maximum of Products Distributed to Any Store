@@ -1,0 +1,19 @@
+class Solution:
+    def minimizedMaximum(self, n: int, quantities: List[int]) -> int:
+        def can_distribute(max_dist_val):
+            req_stores = 0
+            for q in quantities:
+                req_stores += (q + max_dist_val - 1) // max_dist_val
+            return 1 if req_stores <= n else 0
+
+        l, r = 1, max(quantities)
+        min_ans = float('inf')
+        while l <= r:
+            mid = (l + r) // 2
+            if can_distribute(mid):
+                min_ans = min(min_ans, mid)
+                r = mid - 1
+            else:
+                l = mid + 1
+
+        return min_ans
