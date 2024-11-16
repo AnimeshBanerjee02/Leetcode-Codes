@@ -1,0 +1,15 @@
+class Solution:
+    def resultsArray(self, nums: List[int], k: int) -> List[int]:
+        return [
+            x if y >= k - 1 else -1
+            for x, y in zip(
+                nums[k - 1 :],
+                list(
+                    accumulate(
+                        [b - a == 1 for a, b in pairwise(nums)],
+                        lambda x, y: x + y if y == 1 else 0,
+                        initial=1,
+                    )
+                )[k - 1 :],
+            )
+        ]
