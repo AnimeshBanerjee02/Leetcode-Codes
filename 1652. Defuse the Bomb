@@ -1,0 +1,17 @@
+class Solution:
+    def decrypt(self, code, k):
+        n = len(code)
+        if k == 0:
+            return [0] * n
+
+        result = [0] * n
+        extended = code + code 
+
+        if k > 0:
+            for i in range(n):
+                result[i] = sum(extended[i + 1: i + 1 + k]) 
+        else:
+            for i in range(n):
+                result[i] = sum(extended[i + n + k: i + n]) 
+
+        return result
