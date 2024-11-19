@@ -1,0 +1,24 @@
+from collections import Counter
+
+class Solution:
+    def maximumSubarraySum(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        s = sum(nums[:k])
+        count = Counter(nums[:k])
+        metacount = Counter(count.values())
+        if metacount[1] == k:
+            ans = s
+        else:
+            ans = 0
+
+        for i in range(k, n):
+            s += nums[i] - nums[i-k]
+            metacount[count[nums[i-k]]] -= 1
+            count[nums[i-k]] -= 1
+            metacount[count[nums[i-k]]] += 1
+            metacount[count[nums[i]]] -= 1
+            count[nums[i]] += 1
+            metacount[count[nums[i]]] += 1
+            if metacount[1] == k:
+                ans = max(ans, s)
+        return ans
