@@ -1,0 +1,17 @@
+class Solution:
+    def takeCharacters(self, s: str, k: int) -> int:
+        counter = [s.count(c) for c in "abc"]
+        if min(counter) < k:
+            return -1
+        i = len(s)
+        j = 0
+        result = float("inf")
+        while i > 0:
+            i -= 1
+            key = ord(s[i]) - 97
+            counter[key] -= 1
+            while counter[key] < k:
+                j -= 1
+                counter[ord(s[j]) - 97] += 1
+            result = min(result, i - j)
+        return result
