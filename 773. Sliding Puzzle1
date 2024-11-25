@@ -1,0 +1,36 @@
+from typing import List
+
+class Solution:
+    def slidingPuzzle(self, board: List[List[int]]) -> int:
+        start = ''.join(str(cell) for row in board for cell in row)
+
+        target = '123450'
+
+        moves = {
+            0: [1, 3],
+            1: [0, 2, 4],
+            2: [1, 5],
+            3: [0, 4],
+            4: [1, 3, 5],
+            5: [2, 4]
+        }
+
+        queue = [(start, start.index('0'), 0)]
+        visited = set([start])
+
+        while queue:
+            state, zero_idx, moves_count = queue.pop(0)
+
+            if state == target:
+                return moves_count
+
+            for next_zero_idx in moves[zero_idx]:
+                next_state = list(state)
+                next_state[zero_idx], next_state[next_zero_idx] = next_state[next_zero_idx], next_state[zero_idx]
+                next_state = ''.join(next_state)
+
+                if next_state not in visited:
+                    visited.add(next_state)
+                    queue.append((next_state, next_zero_idx, moves_count + 1))
+
+        return -1
