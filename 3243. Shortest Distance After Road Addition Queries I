@@ -1,0 +1,21 @@
+class Solution:
+    def getDistance(self, graph, n):  
+        q = deque([(0,0)]) 
+        s = set() 
+        while q:
+            node, dist = q.popleft()
+            if node == n:
+                return dist
+            if node not in s:
+                s.add(node)
+                for i in graph[node]:
+                    q.append((i, dist+1)) 
+        return -1
+        
+    def shortestDistanceAfterQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+        graph = {i-1:[i] for i in range(1,n)}
+        ret_arr = []
+        for f,t in queries: 
+            graph[f].append(t)
+            ret_arr.append(self.getDistance(graph, n-1))
+        return ret_arr  
