@@ -1,0 +1,23 @@
+class Solution:
+    def minimumObstacles(self, grid: List[List[int]]) -> int:
+        queue = deque()
+        dir = [[1,0],[0,1],[-1,0],[0,-1]]
+        visited = set()
+        n = len(grid)
+        m = len(grid[0])
+        queue.append((0, 0, 0))
+        visited.add((0, 0))
+        while queue:
+            i,j,count = queue.popleft()
+            if i == n - 1 and j == m - 1:
+                return count
+            for x,y in dir:
+                dx = x+i
+                dy = y+j
+                if dx>=0 and dx<n and dy>=0 and dy<m and (dx, dy) not in visited:
+                    visited.add((dx, dy))
+                    if grid[dx][dy] == 1:
+                        queue.append((dx, dy, count + 1))
+                    else:
+                        queue.appendleft((dx, dy, count))
+        return -1
