@@ -1,0 +1,36 @@
+class Solution:
+    def checkIfExist(self, arr: List[int]) -> bool:
+        arr.sort()
+        n=len(arr)
+        for i in range(n):
+            k=arr[i]
+            
+            # binary search for negatives
+            if k<0:
+                lo=0
+                hi=i
+                while lo<hi:
+                    mid=(lo+hi)//2
+                    
+                    if arr[mid]==(2*k):
+                        return True
+                    elif arr[mid]<(2*k):
+                        lo=mid+1
+                    else:
+                        hi=mid
+            
+            # binary seach for non negatives
+            else:
+                lo=i+1
+                hi=n
+                while lo<hi:
+                    mid=(lo+hi)//2
+                    
+                    if arr[mid]==(k*2):
+                        return True
+                    elif arr[mid]<(k*2):
+                        lo=mid+1
+                    else:
+                        hi=mid
+                        
+        return False
