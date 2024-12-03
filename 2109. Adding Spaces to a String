@@ -1,0 +1,10 @@
+class Solution:
+    def addSpaces(self, s: str, spaces: List[int]) -> str:
+        res = []
+        indices = set(spaces)
+        for i in range(len(s)):
+            if i in indices:
+                res.append(" " + s[i])
+            else:
+                res += s[i]
+        return "".join(res)
