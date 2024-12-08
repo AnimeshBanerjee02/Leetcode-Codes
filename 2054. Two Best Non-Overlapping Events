@@ -1,0 +1,20 @@
+import heapq
+
+class Solution:
+    def maxTwoEvents(self, events: List[List[int]]) -> int:
+        right_heap = [(0, float('inf'))]  # [value, start_time]
+        right_heap.extend((-value, start_time) for start_time, _, value in events)
+        heapq.heapify(right_heap)
+
+        result = 0
+
+        max_left_value = 0
+        for _, end_time, left_value in sorted(events, key=lambda x: x[1]):
+            max_left_value = max(max_left_value, left_value)
+
+            while end_time >= right_heap[0][1]:
+                heapq.heappop(right_heap)
+            
+            result = max(result, max_left_value - right_heap[0][0])
+
+        return result
