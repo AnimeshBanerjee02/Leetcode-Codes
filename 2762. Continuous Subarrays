@@ -1,0 +1,46 @@
+class Solution:
+    def continuousSubarrays(self, nums: List[int]) -> int:
+        Lo = defaultdict(int)
+        i,j = 0,0
+        minVal = nums[i]
+        maxVal = nums[i]
+        Lo[minVal] = i
+        _len = len(nums)
+        total = _len
+        overlay = defaultdict(int)
+        while j < _len:
+            Lo[nums[j]] = j
+            if nums[j] > maxVal:
+                maxVal = nums[j]
+            if nums[j] < minVal:
+                minVal = nums[j]
+
+            if not 0 <= maxVal-minVal <= 2:
+                total += ((j-i)*(j-i-1)//2)
+                if Lo[maxVal] < Lo[minVal]:
+                    i = Lo[maxVal] + 1
+                else:
+                    i = Lo[minVal] + 1
+                dict1 = []
+                for key,val in Lo.items():
+                    if val < i:
+                        dict1.append(key)
+                
+                overlay[j-i] += 1
+                for val in dict1:
+                    del Lo[val]
+
+                
+                maxVal = max(Lo.keys())
+                minVal = min(Lo.keys())
+
+            j += 1
+        
+        if j == _len and i < _len-1:
+            total += ((j-i)*(j-i-1)//2)
+        
+        removeOverLay = 0
+        for key,val in overlay.items():
+            removeOverLay += (key*(key-1)//2)  * val
+
+        return total - removeOverLay
