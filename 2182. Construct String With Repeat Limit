@@ -1,0 +1,41 @@
+import heapq
+
+from collections import Counter
+
+class Solution:
+    def repeatLimitedString(self, s: str, repeatLimit: int) -> str:
+        result = []
+
+        heap = [(-ord(item), amount) for item, amount in Counter(s).items()]
+        heapq.heapify(heap)
+
+        def fill_bridge():
+            source, amount = heapq.heappop(heap)
+            item = chr(-source)
+
+            result.append(item)
+
+            if amount - 1:
+                heapq.heappush(heap, (source, amount - 1))
+
+        while heap:
+            source, amount = heapq.heappop(heap)
+            item = chr(-source)
+
+            while amount:
+                cur = repeatLimit
+
+                if amount < repeatLimit:
+                    cur = amount
+
+                result.extend([item] * cur)
+
+                amount -= cur
+
+                if amount:
+                    if not heap:
+                        break
+
+                    fill_bridge()
+
+        return "".join(result)
