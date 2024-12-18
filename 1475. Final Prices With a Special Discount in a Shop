@@ -1,0 +1,16 @@
+class Solution:
+    def finalPrices(self, prices: List[int]) -> List[int]:
+        result = [None] * len(prices)
+        mStack = []
+
+        for i, n in enumerate(prices):
+            while mStack and n <= mStack[-1][1]:
+                result[mStack[-1][0]] = mStack[-1][1] - n
+                mStack.pop()
+
+            mStack.append((i, n))
+
+        for i, n in mStack:
+            result[i] = n
+
+        return result
