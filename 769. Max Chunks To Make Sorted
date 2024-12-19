@@ -1,0 +1,13 @@
+class Solution:
+    def maxChunksToSorted(self, arr: List[int]) -> int:
+        elements = [(n, i) for i, n in enumerate(arr)]
+        elements.sort()
+        movements = [(j, m[1]) for j, m in enumerate(elements)]
+        farthest_fixed = 0
+        chunk_count = 0
+        for j, i in movements:
+            if farthest_fixed < i:
+                farthest_fixed = i
+            if j == farthest_fixed:
+                chunk_count = chunk_count + 1
+        return chunk_count
