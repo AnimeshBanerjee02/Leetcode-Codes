@@ -1,0 +1,22 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        self.dfs(1, root.left, root.right)
+        return root
+
+    def dfs(self, level: int, left: Optional[TreeNode], right: Optional[TreeNode]):
+        if not left and not right:
+            return
+        
+        if level % 2 != 0:
+            temp: int = left.val
+            left.val = right.val
+            right.val = temp
+        
+        self.dfs(level + 1, left.left, right.right)
+        self.dfs(level + 1, left.right, right.left)
