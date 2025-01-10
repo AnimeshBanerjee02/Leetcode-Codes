@@ -1,0 +1,15 @@
+class Solution:
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+        result, cache = [], {}
+        for word in words2:
+            cnt = Counter(word)
+            for i, j in cnt.items():
+                cache[i] = max(cache.get(i, 0), j)
+        for word in words1:
+            cnt = Counter(word)
+            for i, j in cache.items():
+                if i not in cnt or cnt[i] < j: 
+                    break
+            else:
+                result.append(word)
+        return result
