@@ -1,0 +1,14 @@
+class Solution:
+    def minimizeXor(self, num1: int, num2: int) -> int:
+        num1 = bin(num1)[:1:-1] # reverse
+        num2 = bin(num2)[2:]
+        num_to_set = num2.count("1") - num1.count("1")
+
+        if num_to_set > 0:
+            if (num_to_pad := (num_to_set - num1.count("0"))) > 0:
+                num1 = num1 + "0" * num_to_pad
+            num1 = num1.replace("0", "1", num_to_set)
+        else:
+            num1 = num1.replace("1", "0", -num_to_set)
+
+        return int(num1[::-1], 2) 
