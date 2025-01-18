@@ -1,0 +1,18 @@
+class Solution:
+    def minCost(self, grid: List[List[int]]) -> int:
+        def gen_next(p):
+            directions = [(0,-1,2), (0,1,1), (1,0,3), (-1,0,4)]
+            for x, y, d in directions:
+                yield x, y, (0 if d == p else 1)
+        visited = set()
+        q = [(0,0,0)]
+        while len(q) > 0:
+            cost, x, y = heapq.heappop(q)
+            if x == len(grid) - 1 and y == len(grid[0]) - 1:
+                return cost
+            if (x, y) not in visited:
+                visited.add((x,y))
+                for dx, dy, c in gen_next(grid[x][y]):
+                    new_x, new_y = x + dx, y + dy
+                    if 0 <= new_y < len(grid[0]) and 0 <= new_x < len(grid):
+                        heapq.heappush(q, (cost+c, new_x, new_y))
