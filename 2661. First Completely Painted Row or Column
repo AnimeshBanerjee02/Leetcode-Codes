@@ -1,0 +1,15 @@
+class Solution:
+    def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+        r,c = len(mat),len(mat[0])
+        rows = {x:c for x in range(r)}
+        cols = {x:r for x in range(c)}
+        m = defaultdict()
+        for i in range(r):
+            for j in range(c):
+                m[mat[i][j]] = (i,j)
+        for i in range(len(arr)):
+            row,col = m[arr[i]]
+            rows[row] -= 1
+            cols[col] -= 1
+            if rows[row] == 0 or cols[col] == 0:
+                return i
