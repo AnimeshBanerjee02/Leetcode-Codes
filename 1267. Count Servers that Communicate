@@ -1,0 +1,50 @@
+class DSU:
+    def __init__(self, nodes):
+        self.p = {node:node for node in nodes}
+        self.r = {node:1 for node in nodes}
+
+    def union(self, u, v):
+        pu = self.find(u)
+        pv = self.find(v)
+        if pu == pv:
+            return
+        if self.r[pu] >= self.r[pv]:
+            self.p[pv] = pu
+            if self.r[pu] == self.r[pv]:
+                self.r[pu] += 1
+        else:
+            self.p[pu] = pv
+        
+
+    def find(self, u):
+        if u == self.p[u]:
+            return self.p[u]
+        self.p[u] = self.find(self.p[u])
+        return self.p[u]
+
+    def rank(self, u):
+        pu = self.find(u)
+        return self.r[pu]
+
+class Solution:
+    def countServers(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        comPos = set()
+        row, col = defaultdict(int), defaultdict(int)
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    comPos.add((i,j))
+                    if i not in row:
+                        row[i] = (i,j)
+                    if j not in col:
+                        col[j] = (i,j)
+        lonely = 0
+        dsu = DSU(comPos)
+        for pos in comPos:
+            dsu.union(pos, row[pos[0]])
+            dsu.union(pos, col[pos[1]])
+        for pos in comPos:
+            if dsu.rank(pos) == 1:
+                lonely += 1
+        return len(comPos) - lonely
