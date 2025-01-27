@@ -1,0 +1,33 @@
+class Solution:
+    def __init__(self):
+        self.graph = {}
+
+    def constructGraph(self, elements: List[List[int]]):
+        for parent, child in elements:
+            self.graph[parent] = self.graph.get(parent, []) + [child]
+        print(self.graph)
+
+    def findIfPrerequisite(self, n: int, start: int, end: int) -> bool:
+        visited = [False] * n
+        return self.findIfPrerequisiteHelper(start, end, visited)
+    
+    def findIfPrerequisiteHelper(self, start: int, end: int, visited: List[bool]) -> bool:
+        if start == end:
+            return True
+        
+        visited[start] = True
+        if start in self.graph:
+            for child in self.graph[start]:
+                if not visited[child]:
+                    if child == end or self.findIfPrerequisiteHelper(child, end, visited):
+                        return True
+        return False  
+
+    def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
+        answer = [False] * len(queries)
+        self.constructGraph(prerequisites)
+        
+        for index, (start, end) in enumerate(queries):
+            answer[index] = self.findIfPrerequisite(numCourses, start, end)
+        
+        return answer
