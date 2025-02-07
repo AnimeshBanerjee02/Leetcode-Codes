@@ -1,0 +1,22 @@
+class Solution:
+    def queryResults(self, limit: int, queries: List[List[int]]) -> List[int]:
+        color_map = {}
+        color_count = defaultdict(int)
+        result = []
+        distinct_color_count = 0
+        
+        for x, y in queries:
+            if x in color_map:
+                old_color = color_map[x]
+                color_count[old_color] -= 1
+                if color_count[old_color] == 0:
+                    distinct_color_count -= 1
+            
+            color_map[x] = y
+            if color_count[y] == 0:
+                distinct_color_count += 1
+            color_count[y] += 1
+            
+            result.append(distinct_color_count)
+        
+        return result
