@@ -1,0 +1,10 @@
+class Solution:
+    def countBadPairs(self, nums: List[int]) -> int:
+        count = {}
+        bad = 0 
+        for i in range(len(nums)):
+            dif = i - nums[i] 
+            check = count.get(dif, 0)
+            bad += i - check
+            count[dif] = check + 1
+        return bad
