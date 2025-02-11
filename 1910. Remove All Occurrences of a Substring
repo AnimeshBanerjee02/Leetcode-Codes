@@ -1,0 +1,11 @@
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        n = len(part)
+        st = []
+        for i in s:
+            st.append(i)
+            if st and "".join(st[-n:]) == part:
+                for i in range(n):
+                    st.pop()
+        
+        return "".join(st)
