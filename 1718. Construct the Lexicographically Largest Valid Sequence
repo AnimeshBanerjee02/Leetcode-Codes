@@ -1,0 +1,21 @@
+class Solution:
+    def constructDistancedSequence(self, n: int) -> List[int]:
+        m = 2*n - 1
+        A = [0]*m
+        path = set()
+        def dfs(i):
+            if i == m:
+                return all(A)
+            if A[i]:
+                return dfs(i+1)
+            for v in range(n, 0, -1):
+                j = i if v == 1 else i + v
+                if v not in path and j < m and not A[j]:
+                    A[i], A[j] = v, v
+                    path.add(v)
+                    if dfs(i+1): return True
+                    A[i], A[j] = 0, 0
+                    path.remove(v)
+            return False
+        if dfs(0): return A
+        return []
