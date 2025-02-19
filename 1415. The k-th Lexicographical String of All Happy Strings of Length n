@@ -1,0 +1,23 @@
+class Solution:
+    def getHappyString(self, n: int, k: int) -> str:
+        if k > (3 * (2 ** (n - 1))):
+            return ""
+
+        d = {"a": "bc", "b": "ca", "c": "ab"}
+        arr = []
+
+        def generate(curr, n):
+            if n == 0:
+                arr.append(curr)
+                return
+            if curr != "":
+                for char in d[curr[-1]]:
+                    generate(curr + char, n - 1)
+            else:
+                for char in "abc":
+                    generate(curr + char, n - 1)
+
+        generate("", n)
+        arr.sort()
+
+        return arr[k-1]
