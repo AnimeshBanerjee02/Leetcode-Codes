@@ -1,0 +1,49 @@
+class Solution:
+    def __init__(self):
+        self.maxi = -1e9
+
+    def bobTravel(self, bob, time, adj, bobPath):
+        bobPath[bob] = time
+        if bob == 0:
+            return True
+        
+        for neighbour in adj[bob]:
+            if neighbour not in bobPath:
+                if self.bobTravel(neighbour, time + 1, adj, bobPath):
+                    return True
+                bobPath.pop(neighbour)
+        
+        return False
+
+    def aliceTravel(self, node, time, amt, vis, adj, amount, bobPath):
+        if node in bobPath:
+            if time == bobPath[node]:
+                amt += amount[node] // 2
+            if time < bobPath[node]:
+                amt += amount[node]
+        else:
+            amt += amount[node]
+        
+        vis.add(node)
+        cnt = 0
+        for neighbour in adj[node]:
+            if neighbour not in vis:
+                cnt += 1
+                self.aliceTravel(neighbour, time + 1, amt, vis, adj, amount, bobPath)
+        
+        if cnt == 0:
+            self.maxi = max(self.maxi, amt)
+
+    def mostProfitablePath(self, edges: List[List[int]], bob: int, amount: List[int]) -> int:
+        adj = defaultdict(list)
+        for u, v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+        
+        bobPath = dict()
+        self.bobTravel(bob, 1, adj, bobPath)
+
+        vis = set()
+        self.aliceTravel(0, 1, 0, vis, adj, amount, bobPath)
+        return self.maxi
+        
