@@ -1,0 +1,20 @@
+class Solution:
+    def numOfSubarrays(self, arr: List[int]) -> int:
+        odd=0
+        even=0
+        ans=0
+        curr=0
+        mod = pow(10,9)+7
+        for num in arr:
+            curr+=num
+            if curr%2==0:
+                even+=1
+                ans+=odd
+            else:
+                odd+=1
+                ans+=(even+1)
+            ans=ans%mod   
+        return ans            
+
+
+        
