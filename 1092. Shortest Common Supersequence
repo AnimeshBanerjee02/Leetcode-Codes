@@ -1,0 +1,30 @@
+class Solution:
+    def shortestCommonSupersequence(self, str1: str, str2: str) -> str:
+        
+        @functools.lru_cache(None)
+        def dp(i, j):
+            if i == len(str1) or j == len(str2):
+                return ""
+            ans = max(dp(i+1, j), dp(i, j+1), key = lambda x:len(x))
+            if str1[i] == str2[j]:
+                ans = max(ans, str1[i] + dp(i+1, j+1),key = lambda x:len(x))
+            return ans
+
+        ans = ""
+        i = 0 
+        j = 0
+        for c in dp(0, 0):
+            while str1[i] != c:
+                ans += str1[i]
+                i+=1
+            while str2[j] != c:
+                ans += str2[j]
+                j+=1
+            
+            ans += c
+            j +=1
+            i +=1
+        return ans + str1[i:] + str2[j:]
+            
+        
+        
