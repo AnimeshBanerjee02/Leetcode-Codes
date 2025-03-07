@@ -1,0 +1,56 @@
+class Solution:
+    def isPrime(self, num: int) -> bool:
+        if num < 2:
+            return False
+        
+        i = 2
+        while i * i <= num:
+            if num % i == 0:
+                return False
+            
+            i += 1
+
+        return True 
+
+    def closestPrimes(self, left: int, right: int) -> List[int]:
+        prev = -1
+        curr = -1
+        gap = 100
+
+        while left <= right:
+            if gap <= 2:
+                break
+            
+            if self.isPrime(left):
+                if prev == -1:
+                    prev = left
+
+                    left += 1
+                    continue
+                
+                if curr == -1:
+                    curr = left
+                    gap = curr - prev 
+
+                    left += 1
+                    continue
+                
+                if curr != -1:
+                    if left - curr < gap:
+                        gap = left - curr
+                        prev = curr
+                    
+                    curr = left
+            
+            if left <= 2:
+                left += 1
+                continue
+            
+            left += 2 if left & 0x01 else 1
+            
+        
+        if prev == -1 or curr == -1:
+            return [-1, -1]
+        
+        return [prev, prev + gap]
+                
