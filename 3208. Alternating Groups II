@@ -1,0 +1,5 @@
+class Solution:
+    def numberOfAlternatingGroups(self, c: List[int], k: int) -> int:
+        l=0;
+        return sum((l:=(a!=b)and(l+1))>=k-1  for a,b in pairwise(c+c[:k-1])) 
+  
