@@ -1,0 +1,29 @@
+class Solution:
+    def minZeroArray(self, nums: List[int], queries: List[List[int]]) -> int:
+        if nums.count(0) == len(nums):
+            return 0
+        def check(m):
+            s = defaultdict(int)
+            e = defaultdict(int)
+            for q in queries[0:m+1]:
+                s[q[0]] += q[2]
+                e[q[1]] += q[2]
+            curr = 0
+            for i,num in enumerate(nums):
+                curr += s[i]
+                if num>curr:
+                    return False
+                curr -= e[i]
+            return True
+
+        if not check(len(queries)):
+            return -1
+        l = 0
+        r = len(queries)
+        while l<=r:
+            m = (l+r)//2
+            if check(m):
+                r = m-1 
+            else:
+                l = m+1
+        return l+1
