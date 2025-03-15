@@ -1,0 +1,16 @@
+class Solution:
+    def minCapability(self, A: List[int], k: int) -> int:
+        def k_items_upto(value):
+            max_seen_upto_value = curr = dp1 = dp2 = dp3 = 0
+            for i in range(len(A)):
+                curr = int(A[i] <= value) + max(dp2, dp3)
+                dp3, dp2, dp1 = dp2, dp1, curr
+                max_seen_upto_value = max(max_seen_upto_value, curr)
+            return max_seen_upto_value >= k
+
+        lo, hi = 0, max(A)
+        while lo < hi:
+            value = (lo + hi) // 2
+            if k_items_upto(value): hi = value
+            else: lo = value + 1
+        return hi
