@@ -1,0 +1,11 @@
+class Solution:
+    def longestNiceSubarray(self, nums: List[int]) -> int:
+        res, bitmask = 0, 0
+        left = 0
+        for right in range(len(nums)):
+            while bitmask & nums[right]:
+                bitmask ^= nums[left]
+                left += 1
+            bitmask |= nums[right]
+            res = max(res, right - left + 1)
+        return res
