@@ -1,0 +1,13 @@
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        op,n = 0,len(nums)
+        for r in range(n):
+            if nums[r]==1:
+                continue
+            if r+2>=n:
+                return -1
+            else:
+                op += 1
+                nums[r+1] ^= 1
+                nums[r+2] ^= 1 
+        return op
