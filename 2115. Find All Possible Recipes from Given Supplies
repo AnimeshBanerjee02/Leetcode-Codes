@@ -1,0 +1,16 @@
+class Solution:
+    def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
+        supplies = set(supplies)
+        res = set()
+        while True:
+            before = len(res)
+            for recipe, ingredient in zip(recipes, ingredients):
+                if recipe in res:
+                    continue
+                if all(e in supplies for e in ingredient):
+                    res.add(recipe)
+                    supplies.add(recipe)
+            after = len(res)
+            if before == after:
+                break
+        return list(res)
