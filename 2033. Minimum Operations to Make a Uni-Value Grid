@@ -1,0 +1,23 @@
+class Solution:
+    def minOperations(self, grid: List[List[int]], x: int) -> int:
+        #initializing variables 
+        temp = []
+        ans = 0
+        rem = grid[0][0] % x 
+
+        #checking all numbers give same remainders when divided by x , if not return -1
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                temp.append(grid[i][j])
+                if(grid[i][j] % x != rem):
+                    return -1
+
+        # finding median 
+        temp.sort()
+        median = temp[len(temp) // 2] 
+
+        #calculating operations to make uni-value grid and returning no of operations 
+        for i in range(len(temp)):
+            ans += abs(median - temp[i]) // x 
+        return ans 
+
