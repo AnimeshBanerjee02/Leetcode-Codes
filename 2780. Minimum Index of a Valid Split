@@ -1,0 +1,24 @@
+from collections import Counter
+
+class Solution:
+    def minimumIndex(self, nums: List[int]) -> int:
+        dict2=Counter(nums)
+        dict1=defaultdict(int)
+        n=len(nums)
+        count=0
+
+        for i,num in enumerate(nums):
+            dict2[num]-=1
+            dict1[num]+=1
+
+            if dict1[num]*2>i+1 and dict2[num]*2>n-i-1:
+                return i
+        
+        return -1
+
+
+
+
+
+        
+        
