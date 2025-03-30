@@ -1,0 +1,29 @@
+class Solution:
+    def partitionLabels(self, s: str) -> List[int]:
+        mp = defaultdict(list)
+
+        for i, x in enumerate(s):
+            if x not in mp:
+                mp[x] = [i, i]
+                continue
+            [s, e] = mp[x]
+            mp[x] = [s, i]
+
+        arr = list(mp.values())
+        arr.sort()
+        prev = arr[0]
+        n = len(arr)
+        new_arr = []
+        for i in range(1, n):
+            if arr[i][0] < prev[1]:
+                prev[1] = max(prev[1], arr[i][1])
+            else:
+                new_arr.append(prev)
+                prev = arr[i]
+        
+        new_arr.append(prev)
+        ans = []
+        for x in new_arr:
+            ans.append(x[1] - x[0] + 1)
+        
+        return ans
